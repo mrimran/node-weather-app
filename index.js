@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const yargs = require('yargs');
 const geocode = require('./geocode/geocode');
+const forecast = require('./forecast/forecast');
 
 const argv = yargs
 .options({//argument options
@@ -23,5 +24,12 @@ geocode.geocodeAddress(argv.address, (error, results) => {
         console.log(error);
     } else {
         console.log(JSON.stringify(results, undefined, 2));
+        forecast.getTemprature(results.lng, results.lat, (tempErr, tempRes) => {
+            if(tempErr) {
+                console.log(tempErr);
+            } else {
+                console.log("Temprature: ", tempRes.temprature);
+            }
+        });
     }
 });
